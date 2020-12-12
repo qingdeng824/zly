@@ -37,47 +37,56 @@
 // const doingth = JSON.parse(window.localStorage.getItem("thing")) || []
 
 // let info = null
-let obj = {
-    'doing':[],
-    'did':[]
-}
+
+
+// let obj = {
+//     'doing':[],
+//     'did':[]
+// }
 init()
 function init(){
-    const dothing = JSON.parse(window.localStorage.getItem('thing'))
-    console.log(dothing)
+    // const thing = JSON.parse(window.localStorage.getItem('thing'))
+    // console.log(thing)
 
 
     $('#title').on('keydown',function(e){
+        const thing = JSON.parse(window.localStorage.getItem('thing')) || {doing: [],did: []}
         e = e || window.event
         var code = e.keyCode || e.which
         if(code === 13){
             e.preventDefault()
             info = $(this).val().trim()
+            if (!info) return
             // console.log(info)
-            obj.doing.push(`${ info }`)
-            console.log('newobj',obj)
+            thing.doing.push(info)
+            // console.log('newobj',obj)
             // window.localStorage.getItem('thing', JSON.stringify(obj))
-            console.log(dothing)
-            window.localStorage.setItem('thing', JSON.stringify(dothing))
+            // console.log(doing)
+            window.localStorage.setItem('thing', JSON.stringify(thing))
             bindHtml()
-            reload()
+            $(this).val('')
+            // reload()
         }
-        
     })
 
     
 }
-function reload(){
-    if(JSON.parse(window.localStorage.thing)){
-        JSON.parse(window.localStorage.thing)
-        bindHtml()
-    }
-}
+bindHtml()
+// function reload(){
+//     if(JSON.parse(window.localStorage.thing)){
+//         JSON.parse(window.localStorage.thing)
+//         bindHtml()
+//     }
+// }
 
 function bindHtml(){
+    const thing = JSON.parse(window.localStorage.getItem('thing'))
+    if (!thing) return
     var str = ''
-    window.localStorage.setItem('thing', JSON.stringify(obj))
-    obj.doing.forEach(item => {
+    // window.localStorage.setItem('thing', JSON.stringify(obj))
+    // console.log(thing)
+    // console.log(typeof thing.doing)
+    thing.doing.forEach(item => {
         str += `
         <li>
             <input type="checkbox" />
@@ -89,7 +98,7 @@ function bindHtml(){
     $('#todolist').html(str)
 
     var str2 = ''
-    obj.did.forEach(item => {
+    thing.did.forEach(item => {
         str2 += `
         <li>
             <input type="checkbox" checked="checked" />
@@ -99,8 +108,8 @@ function bindHtml(){
         
     })
     $('#donelist').html(str2)
-    $('#todocount').html(obj.doing.length)
-    $('#donecount').html(obj.did.length)
+    $('#todocount').html(thing.doing.length)
+    $('#donecount').html(thing.did.length)
 }
 
 //渲染页面
